@@ -32,12 +32,26 @@ hbs.registerPartials(path.join(__dirname + "/views/partials"));
 
 // get_default
 app.get("/", (req, res) => {
+  connection.connect(() => {
+    console.log("Connected!");
+  });
   res.render("login");
 });
+
+// get_users
+app.get("/users", (req, res) => {
+  let sql = "SELECT id, username, email FROM accounts";
+  connection.query(sql, (error, results, fields) => {
+    if (error) throw error;
+    res.send(results);
+  });
+});
+
 // get_register
 app.get("/register", (req, res) => {
   res.render("register");
 });
+
 // get_home
 app.get("/home", (request, res) => {
   request.session.loggedin
