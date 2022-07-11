@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Login Form Tutorial</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <div class="login-form">
+      <h1>Sign Up</h1>
+      <div>{{error}}</div>
+      <form action="register" method="POST">
+        <input
+          type="text"
+          name="registerUsername"
+          placeholder="Username"
+          required
+        />
+        <input type="email" name="registerEmail" placeholder="Email" required />
+        <input
+          type="password"
+          name="registerPassword"
+          placeholder="Password"
+          required
+        />
+        <input type="submit" />
+        <a href="/">Log In</a>
+      </form>
+    </div>
+  </body>
+</html>
