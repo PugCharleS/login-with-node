@@ -1,5 +1,5 @@
 const mysql = require("mysql2");
-const dotenv = require("dotenv").config();
+const dotenv = require("dotenv").config({ path: "./vars/.env" });
 const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
@@ -47,12 +47,10 @@ connection.connect((err) => {
 
 // GET
 app.get("/", (req, res) => {
-  // res.sendFile(path.join(__dirname + "/login.html"));
   res.render("login");
 });
 // get_register
 app.get("/register", (req, res) => {
-  // res.sendFile(path.join(__dirname + "/register.html"));
   res.render("register");
 });
 // get_home
