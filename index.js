@@ -6,15 +6,9 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const bcrypt = require("bcryptjs");
 const hbs = require("hbs");
+const { connection } = require("./config/db.config");
 
 const PORT = process.env.PORT;
-
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
-});
 
 const app = express();
 
@@ -34,18 +28,9 @@ app.use(express.static("public"));
 app.set("view engine", "hbs");
 hbs.registerPartials(path.join(__dirname + "/views/partials"));
 
-// connection.connect((err) => {
-//   if (err) throw err;
-//   console.log("Connected!");
-//   let username = "test";
-//   let sql = "SELECT * FROM accounts WHERE username = ?";
-//   connection.query(sql, [username], (err, result) => {
-//     if (err) throw err;
-//     console.log(result);
-//   });
-// });
-
 // GET
+
+// get_default
 app.get("/", (req, res) => {
   res.render("login");
 });
@@ -62,6 +47,8 @@ app.get("/home", (request, res) => {
 });
 
 // POST
+
+// post_auth
 app.post("/auth", (request, res) => {
   const username = request.body.username;
   const password = request.body.password;
@@ -94,6 +81,7 @@ app.post("/auth", (request, res) => {
   }
 });
 
+// post_register
 app.post("/register", async (request, res) => {
   const username = request.body.registerUsername;
   const password = request.body.registerPassword;
@@ -122,9 +110,10 @@ app.post("/register", async (request, res) => {
             (error, results, fields) => {
               if (error) throw error;
 
-              res.redirect("/");
-
-              res.end();
+              res.render("login", {
+                success: "You have successfully created your account",
+              });
+              return;
             }
           );
         }
@@ -136,6 +125,7 @@ app.post("/register", async (request, res) => {
   }
 });
 
+// LISTEN
 app.listen(PORT, () => {
   console.log(`Server on ${PORT}`);
 });
