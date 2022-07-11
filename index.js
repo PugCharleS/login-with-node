@@ -34,6 +34,17 @@ app.use(express.static("public"));
 app.set("view engine", "hbs");
 hbs.registerPartials(path.join(__dirname + "/views/partials"));
 
+connection.connect((err) => {
+  if (err) throw err;
+  console.log("Connected!");
+  let username = "test";
+  let sql = "SELECT * FROM accounts WHERE username = ?";
+  connection.query(sql, [username], (err, result) => {
+    if (err) throw err;
+    console.log(result);
+  });
+});
+
 // GET
 app.get("/", (req, res) => {
   // res.sendFile(path.join(__dirname + "/login.html"));
