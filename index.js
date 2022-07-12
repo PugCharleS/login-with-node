@@ -12,7 +12,12 @@ const PORT = process.env.PORT;
 
 const app = express();
 
+const corsOption = {
+  origin: "localhost:3000",
+};
+
 // PARSERS
+// app.use(cors(corsOption));
 app.use(
   session({
     secret: "secret",
@@ -53,9 +58,9 @@ app.get("/register", (req, res) => {
 });
 
 // get_home
-app.get("/home", (request, res) => {
-  request.session.loggedin
-    ? res.send("Welcome back, " + request.session.username + "!")
+app.get("/home", (req, res) => {
+  req.session.loggedin
+    ? res.send("Welcome back, " + req.session.username + "!")
     : res.send("Please login to view this page!");
   res.end();
 });
@@ -63,9 +68,9 @@ app.get("/home", (request, res) => {
 // POST
 
 // post_auth
-app.post("/auth", (request, res) => {
-  const username = request.body.username;
-  const password = request.body.password;
+app.post("/auth", (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
 
   if (username && password) {
     connection.query(
@@ -77,8 +82,8 @@ app.post("/auth", (request, res) => {
         const comparison = await bcrypt.compare(password, results[0].password);
 
         if (results.length > 0 && comparison) {
-          request.session.loggedin = true;
-          request.session.username = username;
+          req.session.loggedin = true;
+          req.session.username = username;
           res.redirect("/home");
         } else {
           res.render("login", {
@@ -96,10 +101,12 @@ app.post("/auth", (request, res) => {
 });
 
 // post_register
-app.post("/register", async (request, res) => {
-  const username = request.body.registerUsername;
-  const password = request.body.registerPassword;
-  const email = request.body.registerEmail;
+app.post("/register", async (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+  const email = req.body.email;
+
+  console.log(req.body);
 
   const saltRounds = 10;
   const encryptedPassword = await bcrypt.hash(password, saltRounds);
