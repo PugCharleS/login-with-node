@@ -106,8 +106,6 @@ app.post("/register", async (req, res) => {
   const password = req.body.password;
   const email = req.body.email;
 
-  console.log(req.body);
-
   const saltRounds = 10;
   const encryptedPassword = await bcrypt.hash(password, saltRounds);
 
